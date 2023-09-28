@@ -104,4 +104,43 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 console.log(containerMovements.innerHTML);
+
+const calDisplayBalance = function (movements) {
+    const balance = movements.reduce((acc, mov) => acc + mov, 0);
+    labelBalance.textContent = `${balance} EUR`;
+};
+calDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+    const incomes = movements
+        .filter((mov) => mov > 0)
+        .reduce((acc, mov) => acc + mov, 0);
+    labelSumIn.textContent = `${incomes} EUR`;
+
+    const outMoney = movements
+        .filter((mov) => mov < 0)
+        .reduce((acc, mov) => acc + mov, 0);
+    labelSumOut.textContent = `${Math.abs(outMoney)} EUR`;
+
+    const interest = 1.2;
+    const interestMoney = movements
+        .filter((mov) => mov > 0)
+        .map((mov) => mov * (interest / 100))
+        .filter((mov) => mov >= 1)
+        .reduce((acc, inte) => acc + inte);
+    labelSumInterest.textContent = `${interestMoney} EUR`;
+};
+calcDisplaySummary(account1.movements);
+
+const createUserNames = function (accs) {
+    accs.forEach(function (acc) {
+        acc.username = acc.owner
+            .toLowerCase()
+            .split(" ")
+            .map((name) => name[0])
+            .join("");
+    });
+};
+createUserNames(accounts);
+console.log(accounts);
 // displayMovements(account2.movements);
