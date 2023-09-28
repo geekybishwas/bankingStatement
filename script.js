@@ -102,14 +102,11 @@ const displayMovements = function (movements) {
         containerMovements.insertAdjacentHTML("afterbegin", htmL);
     });
 };
-displayMovements(account1.movements);
-console.log(containerMovements.innerHTML);
 
 const calDisplayBalance = function (movements) {
     const balance = movements.reduce((acc, mov) => acc + mov, 0);
     labelBalance.textContent = `${balance} EUR`;
 };
-calDisplayBalance(account1.movements);
 
 const calcDisplaySummary = function (movements) {
     const incomes = movements
@@ -130,7 +127,6 @@ const calcDisplaySummary = function (movements) {
         .reduce((acc, inte) => acc + inte);
     labelSumInterest.textContent = `${interestMoney.toFixed(2)} EUR`;
 };
-calcDisplaySummary(account1.movements);
 
 const createUserNames = function (accs) {
     accs.forEach(function (acc) {
@@ -141,9 +137,6 @@ const createUserNames = function (accs) {
             .join("");
     });
 };
-createUserNames(accounts);
-console.log(accounts);
-// displayMovements(account2.movements);
 
 //Event
 let currentAccount;
