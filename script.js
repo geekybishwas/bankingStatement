@@ -87,9 +87,9 @@ const inputClosePin = document.querySelector(".form__input--pin");
 //     });
 // };
 
-const displayMovements = function (movements) {
+const displayMovements = function (acc) {
     containerMovements.innerHTML = "";
-    movements.forEach(function (mov, i) {
+    acc.movements.forEach(function (mov, i) {
         const type = mov > 0 ? "deposit" : "withdrawal";
         const htmL = `
     <div class="movements__row">
@@ -102,31 +102,35 @@ const displayMovements = function (movements) {
         containerMovements.insertAdjacentHTML("afterbegin", htmL);
     });
 };
+// displayMovements(account1.movements);
+// console.log(containerMovements.innerHTML);
 
-const calDisplayBalance = function (movements) {
-    const balance = movements.reduce((acc, mov) => acc + mov, 0);
+const calDisplayBalance = function (acc) {
+    const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
     labelBalance.textContent = `${balance} EUR`;
 };
+// calDisplayBalance(account1.movements);
 
-const calcDisplaySummary = function (movements) {
-    const incomes = movements
+const calcDisplaySummary = function (acc) {
+    const incomes = acc.movements
         .filter((mov) => mov > 0)
         .reduce((acc, mov) => acc + mov, 0);
     labelSumIn.textContent = `${incomes} EUR`;
 
-    const outMoney = movements
+    const outMoney = acc.movements
         .filter((mov) => mov < 0)
         .reduce((acc, mov) => acc + mov, 0);
     labelSumOut.textContent = `${Math.abs(outMoney)} EUR`;
 
     const interest = 1.2;
-    const interestMoney = movements
+    const interestMoney = acc.movements
         .filter((mov) => mov > 0)
-        .map((mov) => mov * (interest / 100))
+        .map((mov) => (mov * acc.interestRate) / 100)
         .filter((mov) => mov >= 1)
         .reduce((acc, inte) => acc + inte);
     labelSumInterest.textContent = `${interestMoney.toFixed(2)} EUR`;
 };
+// calcDisplaySummary(account1.movements);
 
 const createUserNames = function (accs) {
     accs.forEach(function (acc) {
@@ -137,6 +141,9 @@ const createUserNames = function (accs) {
             .join("");
     });
 };
+createUserNames(accounts);
+// console.log(accounts);
+// displayMovements(account2.movements);
 
 //Event
 let currentAccount;
@@ -160,12 +167,15 @@ btnLogin.addEventListener("click", function (e) {
         }`;
         containerApp.style.opacity = 100;
 
+        inputLoginUsername.value = inputLoginPin.value = "";
+
+        inputLoginPin.blur();
         //Display movements
-        displayMovements(currentAccount.movements);
+        displayMovements(currentAccount);
 
         //Display balance
-        calDisplayBalance(currentAccount.movements);
+        calDisplayBalance(currentAccount);
         //Display summary
-        calcDisplaySummary(currentAccount.movements);
+        calcDisplaySummary(currentAccount);
     }
 });
