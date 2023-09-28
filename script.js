@@ -128,7 +128,7 @@ const calcDisplaySummary = function (movements) {
         .map((mov) => mov * (interest / 100))
         .filter((mov) => mov >= 1)
         .reduce((acc, inte) => acc + inte);
-    labelSumInterest.textContent = `${interestMoney} EUR`;
+    labelSumInterest.textContent = `${interestMoney.toFixed(2)} EUR`;
 };
 calcDisplaySummary(account1.movements);
 
@@ -144,3 +144,35 @@ const createUserNames = function (accs) {
 createUserNames(accounts);
 console.log(accounts);
 // displayMovements(account2.movements);
+
+//Event
+let currentAccount;
+
+btnLogin.addEventListener("click", function (e) {
+    //Prevent form from submitting
+    e.preventDefault();
+
+    currentAccount = accounts.find(
+        (acc) => acc.username === inputLoginUsername.value
+    );
+
+    console.log(currentAccount);
+
+    if (currentAccount?.pin === Number(inputLoginPin.value)) {
+        // console.log("LOGIN");
+
+        //Display UI and message
+        labelWelcome.textContent = `Welcome back, ${
+            currentAccount.owner.split(" ")[0]
+        }`;
+        containerApp.style.opacity = 100;
+
+        //Display movements
+        displayMovements(currentAccount.movements);
+
+        //Display balance
+        calDisplayBalance(currentAccount.movements);
+        //Display summary
+        calcDisplaySummary(currentAccount.movements);
+    }
+});
