@@ -106,8 +106,8 @@ const displayMovements = function (acc) {
 // console.log(containerMovements.innerHTML);
 
 const calDisplayBalance = function (acc) {
-    const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-    labelBalance.textContent = `${balance} EUR`;
+    acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+    labelBalance.textContent = `${acc.balance} EUR`;
 };
 // calDisplayBalance(account1.movements);
 
@@ -156,7 +156,7 @@ btnLogin.addEventListener("click", function (e) {
         (acc) => acc.username === inputLoginUsername.value
     );
 
-    console.log(currentAccount);
+    // console.log(currentAccount);
 
     if (currentAccount?.pin === Number(inputLoginPin.value)) {
         // console.log("LOGIN");
@@ -171,11 +171,38 @@ btnLogin.addEventListener("click", function (e) {
 
         inputLoginPin.blur();
         //Display movements
-        displayMovements(currentAccount);
-
-        //Display balance
-        calDisplayBalance(currentAccount);
-        //Display summary
-        calcDisplaySummary(currentAccount);
+        updateUI(currentAccount);
     }
 });
+const updateUI = function (acc) {
+    displayMovements(acc);
+
+    //Display balance
+    calDisplayBalance(acc);
+    //Display summary
+    calcDisplaySummary(acc);
+};
+btnTransfer.addEventListener("click", function (e) {
+    e.preventDefault();
+    console.log("valisddddddddd");
+    const amount = Number(inputTransferAmount.value);
+    console.log(amount);
+    const receiverAcc = accounts.find(
+        (acc) => acc.username === inputTransferTo.value
+    );
+    if (
+        amount > 0 &&
+        receiverAcc &&
+        currentAccount.balance >= amount &&
+        receiverAcc?.username !== currentAccount.username
+    ) {
+        console.log("vALID");
+        currentAccount.movements.push(-amount);
+        receiverAcc.movements.push(amount);
+
+        //Update UI
+        updateUI(currentAccount);
+    }
+    inputTransferTo.value = inputTransferAmount.value = "";
+});
+console.log(accounts);
