@@ -273,3 +273,39 @@ labelBalance.addEventListener("click", function () {
 //or , Another way of converting nodelist into an array->using spread operator
 // const movementsUI = [...document.querySelectorAll(".movements__value")];
 // console.log(movementsUI);
+
+//Array Method Practice
+
+//1.Sum of balanceDepoist
+
+const bankDepoistSum = accounts
+    .flatMap((acc) => acc.movements)
+    .filter((mov) => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+console.log(bankDepoistSum);
+
+// 2.Number of depoist greater than or equal to 1000
+const numDeposit = accounts
+    .flatMap((mov) => mov.movements)
+    .filter((mov) => mov >= 1000).length;
+console.log(numDeposit);
+
+//OR
+const numDeposit1 = accounts
+    .flatMap((mov) => mov.movements)
+    .filter((mov) => mov > 0)
+    .reduce((count, cur) => (cur >= 1000 ? count + 1 : count), 0);
+console.log(numDeposit1);
+
+//3.Create a object that contains sum and withdrawal
+
+const sums = accounts
+    .flatMap((acc) => acc.movements)
+    .reduce(
+        (sums, curr) => {
+            curr > 0 ? (sums.depoist += curr) : (sums.withdrawals += curr);
+            return sums;
+        },
+        { depoist: 0, withdrawals: 0 }
+    );
+console.log(sums);
