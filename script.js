@@ -87,9 +87,19 @@ const inputClosePin = document.querySelector(".form__input--pin");
 //     });
 // };
 
-const displayMovements = function (acc) {
+let sorted = false;
+btnSort.addEventListener("click", function (e) {
+    e.preventDefault();
+    displayMovements(currentAccount.movements, !sorted);
+    sorted = !sorted;
+});
+
+const displayMovements = function (movements, sort = false) {
     containerMovements.innerHTML = "";
-    acc.movements.forEach(function (mov, i) {
+    ("");
+    const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+    movs.forEach(function (mov, i) {
         const type = mov > 0 ? "deposit" : "withdrawal";
         const htmL = `
     <div class="movements__row">
@@ -175,7 +185,7 @@ btnLogin.addEventListener("click", function (e) {
     }
 });
 const updateUI = function (acc) {
-    displayMovements(acc);
+    displayMovements(acc.movements);
 
     //Display balance
     calDisplayBalance(acc);
@@ -239,3 +249,27 @@ btnLoan.addEventListener("click", function (e) {
     }
     inputLoanAmount.value = "";
 });
+
+//Flat Method
+const overallBalance = accounts
+    .map((acc) => acc.movements)
+    .flat()
+    .reduce((acc, mov) => acc + mov, 0);
+console.log(overallBalance);
+
+//FlatMap Method
+const overallBalance1 = accounts
+    .flatMap((acc) => acc.movements)
+    .reduce((acc, mov) => acc + mov, 0);
+console.log(overallBalance1);
+
+labelBalance.addEventListener("click", function () {
+    const movementsUI = Array.from(
+        document.querySelectorAll(".movements__value")
+    ).map((el) => Number(el.textContent));
+    console.log(movementsUI);
+});
+
+//or , Another way of converting nodelist into an array->using spread operator
+// const movementsUI = [...document.querySelectorAll(".movements__value")];
+// console.log(movementsUI);
