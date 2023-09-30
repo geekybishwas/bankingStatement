@@ -277,7 +277,6 @@ labelBalance.addEventListener("click", function () {
 //Array Method Practice
 
 //1.Sum of balanceDepoist
-
 const bankDepoistSum = accounts
     .flatMap((acc) => acc.movements)
     .filter((mov) => mov > 0)
@@ -298,14 +297,43 @@ const numDeposit1 = accounts
 console.log(numDeposit1);
 
 //3.Create a object that contains sum and withdrawal
-
 const sums = accounts
     .flatMap((acc) => acc.movements)
     .reduce(
         (sums, curr) => {
-            curr > 0 ? (sums.depoist += curr) : (sums.withdrawals += curr);
+            // curr > 0 ? (sums.depoist += curr) : (sums.withdrawals += curr);
+            sums[curr > 0 ? "depoist" : "withdrawals"] += curr;
             return sums;
         },
         { depoist: 0, withdrawals: 0 }
     );
 console.log(sums);
+
+//Convert TitleCase
+const convertTitleCase = function (title) {
+    const exceptions = [
+        "an",
+        "a",
+        "the",
+        "and",
+        "but",
+        "or",
+        "on",
+        "in",
+        "with",
+    ];
+
+    const titleCase = title
+        .toLowerCase()
+        .split(" ")
+        .map((word) =>
+            exceptions.includes(word)
+                ? word
+                : word[0].toUpperCase() + word.slice(1)
+        )
+        .join(" ");
+    return titleCase;
+};
+console.log(convertTitleCase("hey convert me"));
+console.log(convertTitleCase("this is a nice title and it's too long"));
+console.log(convertTitleCase("and here is a caption for you convert it"));
