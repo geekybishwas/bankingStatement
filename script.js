@@ -177,18 +177,32 @@ btnLogin.addEventListener("click", function (e) {
         }`;
         containerApp.style.opacity = 100;
 
+        // const now = new Date();
+        // // console.log(nows);
+
+        // //day/month/year
+        // const day = `${now.getDate()}`.padStart(2, 0);
+        // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+        // const year = now.getFullYear();
+        // const hour = `${now.getHours()}`.padStart(2, 0);
+        // const min = `${now.getMinutes()}`.padStart(2, 0);
+        // const sec = `${now.getSeconds()}`.padStart(2, 0);
+
+        // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}:${sec}`;
+
         const now = new Date();
-        // console.log(nows);
+        const options = {
+            hour: "numeric",
+            minute: "numeric",
+            day: "numeric",
+            month: "numeric",
+            year: "numeric",
+        };
+        const locale = navigator.language; //Get locale from user browser
 
-        //day/month/year
-        const day = `${now.getDate()}`.padStart(2, 0);
-        const month = `${now.getMonth() + 1}`.padStart(2, 0);
-        const year = now.getFullYear();
-        const hour = `${now.getHours()}`.padStart(2, 0);
-        const min = `${now.getMinutes()}`.padStart(2, 0);
-        const sec = `${now.getSeconds()}`.padStart(2, 0);
-
-        labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}:${sec}`;
+        labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(
+            now
+        );
 
         inputLoginUsername.value = inputLoginPin.value = "";
 
@@ -350,3 +364,7 @@ const convertTitleCase = function (title) {
 console.log(convertTitleCase("hey convert me"));
 console.log(convertTitleCase("this is a nice title and it's too long"));
 console.log(convertTitleCase("and here is a caption for you convert it"));
+
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
