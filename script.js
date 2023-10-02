@@ -174,7 +174,7 @@ createUserNames(accounts);
 const startLogoutTimer = function () {
     //Set time to 5 minutes
 
-    let time = 12;
+    let time = 180;
 
     //Call the timer every second
     const tick = () => {
@@ -184,22 +184,24 @@ const startLogoutTimer = function () {
         //In each call,print the remaining time to UI
         labelTimer.textContent = `${min}:${sec}`;
 
-        //Decrese 1s;
-        time--;
-
         // When time expires, stop timer and logout the user
         if (time == 0) {
             clearTimeout(timer);
             labelWelcome.textContent = "Login to get Started";
             containerApp.style.opacity = 0;
         }
+
+        //Decrese 1s;
+        time--;
     };
     tick();
     const timer = setInterval(tick, 1000);
+
+    return timer;
 };
 
 //Event
-let currentAccount;
+let currentAccount, timer;
 
 btnLogin.addEventListener("click", function (e) {
     //Prevent form from submitting
@@ -250,8 +252,11 @@ btnLogin.addEventListener("click", function (e) {
 
         inputLoginPin.blur();
 
+        //Timer
+        if (timer) clearInterval(timer);
         //Call the logout function
-        startLogoutTimer();
+
+        timer = startLogoutTimer();
         //Display movements
         updateUI(currentAccount);
     }
@@ -284,6 +289,10 @@ btnTransfer.addEventListener("click", function (e) {
 
         //Update UI
         updateUI(currentAccount);
+
+        //Reset timer
+        clearInterval(timer);
+        timer = startLogoutTimer();
     }
     inputTransferTo.value = inputTransferAmount.value = "";
 });
@@ -318,7 +327,12 @@ btnLoan.addEventListener("click", function (e) {
         setTimeout(() => {
             currentAccount.movements.push(amount);
 
+            //Update UI
             updateUI(currentAccount);
+
+            //Reset Timer
+            clearInterval(timer);
+            timer = startLogoutTimer();
         }, 3000);
     }
     inputLoanAmount.value = "";
